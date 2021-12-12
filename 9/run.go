@@ -92,7 +92,7 @@ func main() {
 	var basinSizes [300]int
 
 	for i, lowPoint := range lowPoints {
-		if lowPoint != [3]int{0, 0, 0} {
+		if lowPoint != [3]int{0, 0, 0} { // quit after we get "null" entries in this oversized array
 			basinSizes[i] = getBasinSize(lowPoint[0], lowPoint[1], twoDArray[:])
 		}
 	}
