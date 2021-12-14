@@ -34,16 +34,11 @@ for line in lines:
             stack.append(closingChunkChar)
 
     if len(stack) > 0 and not syntaxErrorLine :
-        # print("Incomplete line ",stack)
         totalScore = 0
-        missingLine = ""
         while len(stack) > 0:
             stackTop = stack.pop()
             closingChunkChar = closingChunkCharsInverse[stackTop]
-            missingLine += closingChunkChar
-            totalScore = (totalScore * 5) + incompleteLinePoints[closingChunkChar]
-        # print("TotalScore",totalScore,missingLine)
-    
+            totalScore = (totalScore * 5) + incompleteLinePoints[closingChunkChar]    
         totalScores.append(totalScore)
 
 print("Syntax Error Score ",syntaxErrorScore)
