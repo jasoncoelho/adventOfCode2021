@@ -18,15 +18,11 @@ boards = []
 board = [] 
 for i in lines[2:]:
     if len(i) == 0:
-        boards.append((generatelookup(board),{}))
+        boards.append((generatelookup(board),set()))
         board = []
         continue
     board.append(i.split())
-boards.append((generatelookup(board),{}))
-
-# print("len boards",len(boards))
-# print("boards",boards)
-# print("called number",calledNumbers)
+boards.append((generatelookup(board),set()))
 
 def processAndCheckIfWon(board,calledNumber):
 
@@ -35,42 +31,36 @@ def processAndCheckIfWon(board,calledNumber):
     if calledNumber in lookup:
 
         x,y = lookup[calledNumber]
-        marked[(x,y)] = calledNumber
+        marked.add((x,y))
 
         columnWin = len([ 1 for posY in range(0,5) if (x,posY) in marked ]) == 5
         rowWin = len([ 1 for posX in range(0,5) if (posX,y) in marked ]) == 5
 
         if columnWin or rowWin:
-            return (True,sum([ int(i) for i in lookup if i not in marked.values()]))
+            return (True,sum([ int(i) for i in lookup if lookup[i] not in marked]))
 
     return (False,None)
 
-
-wonFirst = False
-latestWinningNumber = None 
 won = False
-latestUnmarkedSum = None
 
 wonBoards = []
+wonCalledNumbers = []
 
 for calledNumber in calledNumbers:
 
     for board in [b for b in boards if b not in wonBoards]:
 
         won,unmarkedSum = processAndCheckIfWon(board,calledNumber)
-
+        
         if won:
             wonBoards.append(board)
-            print("winning called number", calledNumber)
-            latestWinningNumber = calledNumber
-            latestUnmarkedSum = unmarkedSum
-            if not wonFirst:
-                print("winning board", board,"\n at number",latestWinningNumber)
-                print("unmarked sum = ", unmarkedSum)
-                print("solution = ", unmarkedSum * int(latestWinningNumber))
-                wonFirst = True
-            
+            wonCalledNumbers.append((unmarkedSum,calledNumber))
+ 
+unmarkedSum, winningNumber = wonCalledNumbers[0]
+print("first winning solution solution = ", unmarkedSum * int(winningNumber))            
            
-print("last winning board", board,"\n at winning number",latestWinningNumber)
-print("last winining unmarked sum = ", latestUnmarkedSum)
-print("last winning solution solution = ", latestUnmarkedSum * int(latestWinningNumber))
+unmarkedSum, winningNumber = wonCalledNumbers[len(wonCalledNumbers)-1]
+print("last winning solution solution = ", unmarkedSum * int(winningNumber))
+
+# first winning solution solution =  4662
+# last winning solution solution =  12080
